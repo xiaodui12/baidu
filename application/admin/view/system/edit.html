@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="__H__/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <include file="public/header"/>
+</head>
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row" style="background: #f1f1f1">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5><if condition="empty($id)">新增配置<else/>修改配置</if></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <form method="post" class="form-horizontal" id="submit_form" action="{:url('System/save_info',array('id'=>$id))}">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">配置标识：</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" placeholder="配置标识" name="key" value="{$info['key']|default=''}" class="form-control" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">配置标题：</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="title" value="{$info['title']|default=''}" placeholder="配置标题" required>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">配置值：</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea type="text" class="form-control" name="value" value="{$info['value']|default=''}" placeholder="配置值" required>{$info['value']|default=''}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">配置简介：</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea type="text" class="form-control" name="desc" placeholder="配置简介" value="{$info['desc']|default=''}" required>{$info['desc']|default=''}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">状态：</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" name="status" class="js-switch" {$info['status']?"checked":""}  />
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4 col-sm-offset-2">
+                                                <button class="btn btn-primary" type="submit">保存内容</button>
+                                                <button class="btn btn-white back" type="button" >返回</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <include file="public/footer"/>
+    </div>
+</div>
+
+<!-- Switchery -->
+<script src="__H__/js/plugins/switchery/switchery.js"></script>
+<script>
+    var elem = document.querySelector('.js-switch');
+    var switchery = new Switchery(elem, {
+        color: '#1AB394'
+    });
+    $(".back").click(function () {
+        history.go(-1);
+    })
+    $(function () {
+        $("#submit_form").submit(function () {
+            var key=$(this).find("[name=key]").val();
+            var title=$(this).find("[name=title]").val();
+            var value=$(this).find("[name=value]").val();
+            var desc=$(this).find("[name=desc]").val();
+            var status=$("input[name=status]:checked").length>0?1:0;
+
+            var action=$(this).attr("action");
+            $.ajax({
+                url:action,
+                type:"post",
+                dataType:"json",
+                data:{
+                    key:key,
+                    title:title,
+                    value:value,
+                    desc:desc,
+                    status:status
+                },success:function (res) {
+                    if(res.code==0){
+                        swal(res.msg,"","warning");
+                    }else{
+                        swal({
+                            title: res.msg,
+                            type: "success"
+                        },function () {
+                            history.go(-1);
+                        });
+                    }
+                }
+            })
+            return false;
+        })
+    })
+</script>
+
+
+</body>
+
+</html>

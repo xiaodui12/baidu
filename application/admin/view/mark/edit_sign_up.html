@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <include file="public/header"/>
+
+    <style>
+        .edit_template_div{
+            width: 400px;
+            padding: 20px;
+        }
+        .edit_one{
+            width: 95%;
+            margin: auto;
+            clear: both;
+            line-height:3em;
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .edit_one_left{
+            float: left;
+            width: 6em;
+            text-align: right;
+        }
+        .edit_one_right{
+            width: 220px;
+            float: left;
+            margin-left: 20px;
+        }
+        .edit_one_right input[type=text], .edit_one_right select, .edit_one_right select option{
+            width: 100%;
+            height: 3em;
+            text-indent: 1em;
+            line-height: 3em;
+        }
+    </style>
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row" style="background: #f1f1f1">
+
+
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>{$info->title}</h5>
+                                <div class="ibox-tools">
+                                    <a  class="btn btn-sm btn-primary j-edit add_signup"><i class="glyphicon glyphicon-plus"></i>新增字段</a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th >字段名称</th>
+                                        <th>字段类型</th>
+                                        <th>默认值</th>
+                                        <th>空白提示</th>
+                                        <th>提示语</th>
+                                        <th>是否必填</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="info['markinfo']" id="markinfo">
+                                        <tr>
+                                            <td>{$markinfo->name}</td>
+                                            <td>{$markinfo->type|check_mark_type}</td>
+                                            <td>{$markinfo->default}</td>
+                                            <td>{$markinfo->placeholder}</td>
+                                            <td>{$markinfo->tips}</td>
+                                            <td>{$markinfo->is_mast==1?"必填":"不必填"}</td>
+                                            <td>
+                                                <button class="btn btn-success add_signup"
+                                                        data-id="{$markinfo->id}"
+                                                        data-name="{$markinfo->name}"
+                                                        data-type="{$markinfo->type}"
+                                                        data-default="{$markinfo->default}"
+                                                        data-placeholder="{$markinfo->placeholder}"
+                                                        data-tips="{$markinfo->tips}"
+                                                        data-is_mast="{$markinfo->is_mast}"
+                                                        type="button" >编辑</button>
+                                                <button class="btn btn-danger" data-id="{$markinfo->id}"  type="button">删除</button>
+                                            </td>
+                                        </tr>
+                                    </volist>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <include file="public/footer"/>
+    </div>
+</div>
+<script type="text/javascript" src="__STATIC__/js/template.js"></script>
+
+<script id="edit_template" type="text/html">
+<form id="sign_up_add" onsubmit="return sign_up_add($(this))" action="{:url('Mark/add_sign_up_info',array('id'=>$info['id']))}">
+    <div class="edit_template_div">
+        <div>
+            <div class="edit_one">
+                <div class="edit_one_left">字段名称</div>
+                <div class="edit_one_right"><input type="text" name="name" value="<%=name%>"/></div>
+              <input name="id" type="hidden" value="<%=id%>"/>
+                <div style="clear: both"></div>
+            </div>
+            <div class="edit_one">
+                <div class="edit_one_left">字段类型</div>
+                <div class="edit_one_right">
+                    <select name="type">
+                        <option  value="">请选择</option>
+                        <option  value="1"  <%if(type="1"){ %>selected<%}%>>标题</option>
+                        <option  value="2" <%if(type="2"){ %>selected<%}%>>单行文本</option>
+                        <option  value="3" <%if(type="3"){ %>selected<%}%>>日期选择</option>
+                        <option  value="4" <%if(type="4"){ %>selected<%}%>>下拉</option>
+                        <option  value="5" <%if(type="5"){ %>selected<%}%>>单选</option>
+                        <option  value="6" <%if(type="6"){ %>selected<%}%>>多选</option>
+                    </select>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="edit_one">
+                <div class="edit_one_left">默认值</div>
+                <div class="edit_one_right"><input type="text" name="default"  value="<%=default_name%>" /></div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="edit_one">
+                <div class="edit_one_left">空白提示</div>
+                <div class="edit_one_right"><input type="text" name="placeholder"  value="<%=placeholder%>" /></div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="edit_one">
+                <div class="edit_one_left">提示语</div>
+                <div class="edit_one_right"><input type="text" name="tips" value="<%=tips%>" /></div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="edit_one">
+                <div class="edit_one_left">是否必填</div>
+                <div class="edit_one_right">
+                    <label style="width: 40%"> <input type="radio" name="is_mast" <%if(is_mast==1){%>checked<%}%> value="1">必填</label>
+                    <label style="width: 40%"> <input type="radio" name="is_mast"<%if(is_mast!=1){%>checked<%}%> value="0">不必填</label>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-success" type="submit">
+                保存
+            </button>
+
+        </div>
+
+    </div>
+</form>
+
+</script>
+<script src="__H__/js/plugins/layer/layer.min.js"></script>
+
+<script type="text/javascript">
+
+    function sign_up_add(form) {
+        var data=form.serialize();
+        var action=form.attr("action");
+        $.ajax({
+            url:action,
+            type:"post",
+            "dataType":"json",
+            "data":data,
+            success:function (res) {
+                if(res.code==0){
+                    swal(res.msg,"","warning");
+                }else{
+                    layer.closeAll();
+                    swal({
+                        title: res.msg,
+                        type: "success"
+                    },function () {
+                        location.reload();
+                    });
+                }
+            }
+        })
+        return false;
+    }
+
+    function getinfo(element)
+    {
+        var data={"id":0,
+            "name":"",
+            "type":"",
+            "default_name":"",
+            "placeholder":"",
+            "tips":"",
+            "is_mast":""};
+        var id=element.attr("data-id");
+        if(!id){
+            return data;
+        }
+        data={
+            "id":element.attr("data-id"),
+            "name":element.attr("data-name"),
+            "type":element.attr("data-type"),
+            "default_name":element.attr("data-default"),
+            "placeholder":element.attr("data-placeholder"),
+            "tips":element.attr("data-tips"),
+            "is_mast":element.attr("data-is_mast"),
+        };
+        return data;
+    }
+    $(".add_signup").click(function () {
+        var html = template($("#edit_template").html(), getinfo($(this)));
+        layer.open({
+            type: 1,
+            title: '编辑字段',
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            anim: 2,
+            area: ['440px'],
+            shadeClose: true, //开启遮罩关闭
+            content: html
+        });
+    })
+</script>
+
+</body>
+</html>

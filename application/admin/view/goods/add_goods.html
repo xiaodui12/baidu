@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__H__/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__H__/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+    <include file="public/header"/>
+    <style>
+        .form-group select option{
+            line-height: 1.5em;
+        }
+    </style>
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>带验证的表单向导</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="form_wizard.html#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="form_wizard.html#">选项1</a>
+                                        </li>
+                                        <li><a href="form_wizard.html#">选项2</a>
+                                        </li>
+                                    </ul>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div style="width: 95%;margin: auto" class="ibox-content">
+                                <form id="form" action="{:url('Goods/add_goods_submit')}" class="wizard-big">
+
+                                    <div class="page page_1" data-key="1" >
+                                        <h2>店铺信息</h2>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>选择店铺 *</label>
+                                                    <select name="store"  class="choose_store form-control required"  data-name="选择店铺">
+                                                        <option value="0">总店铺</option>
+                                                        <volist name="store" id="store_one">
+                                                            <option value="{$store_one.id}">{$store_one.store_name}</option>
+                                                        </volist>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>分类 *</label>
+                                                    <select  name="class"  class="choose_store form-control required"  data-name="选择分类">
+                                                        <option value=""> 请选择</option>
+                                                        <volist name="class" id="class_one">
+                                                            <option value="{$class_one.id}">{$class_one.class_name}</option>
+                                                        </volist>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="page page_2" data-key="2">
+                                        <h2>基本信息</h2>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>商品名称 *</label>
+                                                    <input  name="goods_name" type="text" class="form-control required" placeholder="商品名称" data-name="填写商品名称">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>商品类型</label>
+                                                    <select  name="type"  class="choose_store form-control required" data-name="选择商品类型">
+                                                        <option value="1"> 在线视频教程</option>
+                                                        <option value="2">组织活动 </option>
+                                                        <option value="3">线下课程 </option>
+                                                        <option value="4">线下实物 </option>
+                                                        <option value="5">旅游 </option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>商品简介 </label>
+                                                    <textarea  name="goods_desc" type="text" class="form-control " placeholder="商品简介"></textarea>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>原价</label>
+                                                    <input  name="old_price" type="number" class="form-control " placeholder="原价">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>现价 *</label>
+                                                    <input  name="new_price" type="number" class="form-control required" placeholder="现价" data-name="填写现价">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>基础销量</label>
+                                                    <input  name="basic" type="number" class="form-control" placeholder="基础销量">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="page page_3" data-key="3">
+                                        <h2>基本信息</h2>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <div class="form-group">
+                                                    <label>视频</label>
+                                                    <div style="width: 120px;height: 120px;cursor: pointer;position: relative">
+                                                        <input id="video" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;opacity: 0;cursor: pointer" type="file" accept="video/*" />
+                                                        <img src="__STATIC__/image/upload_bg.png" style="width: 100%;height: 100%" class="video_image"/>
+                                                        <input  style="display: none" class="videoid" name="videoid" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>图片*</label>
+                                                    <div style="width: 100%;">
+
+                                                        <div class="upload_image upload_image_pic" style="cursor: pointer;position: relative;">
+                                                            <input id="image" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;opacity: 0;cursor: pointer" type="file" accept="image/*" />
+                                                            <img src="__STATIC__/image/upload_bg.png" style="width: 100%;height: 100%" class="video_image"/>
+                                                            <input style="display: none" class="videoid" name="videoid" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="page page_4" data-key="4">
+                                        <!-- 加载编辑器的容器 -->
+                                        <script id="container" name="content" type="text/plain">这里写你的初始化内容</script>
+                                    </div>
+
+                                    <input type="hidden" name="page" value="0"/>
+                                    <div style="text-align: right;margin: 20px">
+                                        <button type="button" id="prv" class="btn">上一页</button>
+                                        <button type="button" id="next" class="btn" >下一页</button>
+                                        <button type="submit" id="finish" class="btn">完成</button>
+                                        <button type="button" id="cancel" class="btn">取消</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <include file="public/footer"/>
+    </div>
+</div>
+
+<style>
+    .page{
+        display: none;
+    }
+
+    .upload_div{
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+    }
+    .upload_div_mask{
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: absolute;
+        background: #111111;
+        opacity: 0.4;
+    }
+    .upload_div_form{
+        position: relative;
+        width: 600px;
+        top: 30%;
+        margin: auto;
+        background: #ffffff;
+        padding-bottom: 20px;
+    }
+    .upload_div_form_title{
+        text-indent: 1em;
+        font-weight: 600;
+        font-size: 16px;
+        background: -moz-linear-gradient(top, #FFFFFF 0%, #dddddd 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#dddddd));
+        background: -webkit-linear-gradient(top, #FFFFFF 0%,#dddddd 100%);
+        background: -o-linear-gradient(top, #FFFFFF 0%,#dddddd 100%);
+        background: -ms-linear-gradient(top, #FFFFFF 0%,#dddddd 100%);
+        background: linear-gradient(to bottom, #FFFFFF 0%,#dddddd 100%);
+        line-height: 2.5em;
+    }
+    .upload_div_form_speed{
+        width: 80%;
+        margin: auto;
+        background: #dddddd;
+        height: 5px;
+    }
+    .upload_div_form_speed_progress{
+        width: 0%;
+        height: 100%;
+        background: #0e9aef;
+    }
+    .upload_image_pic{
+        float:left;
+        width:120px;
+        height: 120px;
+        margin: 10px;
+        position: relative;
+    }
+    .upload_image_pic img{
+        width: 100%;
+        height: 100%;
+    }
+    .upload_image_pic_close{
+        width: 20px!important;
+        height: 20px!important;
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="upload_div">
+    <div class="upload_div_mask"></div>
+    <div class="upload_div_form">
+        <div class="upload_div_form_title">上传视频</div>
+        <div class="upload_div_form_video">
+            <div style="width: 120px;height: 120px;cursor: pointer;position: relative;margin: auto;display: none" class="upload_div_form_video_load">
+                <img src="__STATIC__/image/load.gif" style="width: 100%;height: 100%"/>
+            </div>
+        </div>
+        <div style="width: 80%;margin: auto">上传进度</div>
+        <div class="upload_div_form_speed">
+            <div class="upload_div_form_speed_progress"></div>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+</div>
+
+<!-- Jquery Validate -->
+<script src="__H__/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="__H__/js/plugins/validate/messages_zh.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function load_page(page) {
+            if(page<1||page>$(".page").length){
+                return false
+            }
+            $(".page").hide();
+            $(".page_"+page).show();
+            $("[name=page]").val(page);
+            page==1?$("#prv").hide():$("#prv").show();
+            page==$(".page").length?$("#next").hide():$("#next").show();
+            page==$(".page").length?$("#finish").show():$("#finish").hide();
+        }
+        $("#prv").click(function () {
+            var page=$("[name=page]").val();
+            load_page(--page);
+        })
+        $("#next").click(function () {
+            var page=$("[name=page]").val();
+            var return_info=true;
+            $(".page_"+page).find(".required").each(function () {
+                if($.trim($(this).val())==""){
+                    return_info=false;
+                    swal("请"+$(this).attr("data-name"));
+                    return false;
+                }
+            })
+
+            if(page==3&&$(".image_code").length==0){
+                swal("请上传图片");
+                return false;
+            }
+            if(return_info){
+                load_page(++page)
+            }
+        })
+        load_page(1);
+    })
+</script>
+
+
+
+
+<script src="__ALI__/lib/es6-promise.min.js"></script>
+<script src="__ALI__/lib/aliyun-oss-sdk-5.3.1.min.js"></script>
+<script src="__ALI__/aliyun-upload-sdk-1.5.0.min.js"></script>
+
+
+<script type="text/javascript">
+    var uploader = new AliyunUpload.Vod({
+        //阿里账号ID，必须有值 ，值的来源https://help.aliyun.com/knowledge_detail/37196.html
+        userId:"{$aliyunuserid}",
+        //上传到点播的地域， 默认值为'cn-shanghai',//eu-central-1,ap-southeast-1
+        region:"cn-shanghai",
+        //分片大小默认1M，不能小于100K
+        partSize: 1048576,
+        //并行上传分片个数，默认5
+        parallel: 5,
+        //网络原因失败时，重新上传次数，默认为3
+        retryCount: 3,
+        //网络原因失败时，重新上传间隔时间，默认为2秒
+        retryDuration: 2,
+        // 开始上传
+        'onUploadstarted': function (uploadInfo) {
+            $(".upload_div").show();
+            console.log("onUploadStarted:" + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object);
+            //上传方式1, 需要根据uploadInfo.videoId是否有值，调用点播的不同接口获取uploadauth和uploadAddress，如果videoId有值，调用刷新视频上传凭证接口，否则调用创建视频上传凭证接口
+            var goods_name=$("[name=goods_name]").val();
+
+            if (uploadInfo.videoId) {
+                // 如果 uploadInfo.videoId 存在, 调用 刷新视频上传凭证接口(https://help.aliyun.com/document_detail/55408.html)
+                $.ajax({
+                    "url":"{:url('Video/refresh_upload')}",
+                    "type":"post",
+                    "data":{name: uploadInfo.file.name,size: uploadInfo.file.size,title:goods_name,videoId:uploadInfo.videoId},
+                    async:false,
+                    dataType:"json",
+                    success:function (res) {
+                        if(res.status){
+                            uploader.setUploadAuthAndAddress(uploadInfo, res.info.UploadAuth, res.info.UploadAddress,res.info.VideoId);
+                        }else{
+                            swal(res.msg);
+                            $(".upload_div").hide();
+                            return false
+                        }
+                    }
+                })
+            }
+            else{
+                // 如果 uploadInfo.videoId 不存在,调用 获取视频上传地址和凭证接口(https://help.aliyun.com/document_detail/55407.html)
+                $.ajax({
+                    "url":"{:url('Video/getupload')}",
+                    "type":"post",
+                    "data":{name: uploadInfo.file.name,size: uploadInfo.file.size,title:goods_name},
+                    async:false,
+                    dataType:"json",
+                    success:function (res) {
+                        if(res.status){
+                            uploader.setUploadAuthAndAddress(uploadInfo, res.info.UploadAuth, res.info.UploadAddress,res.info.VideoId);
+                        }else{
+                            swal(res.msg);
+                            $(".upload_div").hide();
+                            return false;
+                        }
+                    }
+                })
+            }
+
+            $(".upload_div_form_video_load").show();
+            //从点播服务获取的uploadAuth、uploadAddress和videoId,设置到SDK里
+            // uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId);
+        },
+        // 文件上传成功
+        'onUploadSucceed': function (uploadInfo) {
+            console.log("onUploadSucceed: " + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object);
+            swal({
+                title: "上传成功",
+                type: "success"
+            },function () {
+                $(".upload_div").hide();
+                $(".upload_div_form_speed_progress").width("0%");
+                $(".upload_div_form_video_load").hide();
+                $(".upload_div_form_video_input").show();
+                $("[name=videoid]").val(uploadInfo.videoId);
+            });
+
+        },
+        // 文件上传失败
+        'onUploadFailed': function (uploadInfo, code, message) {
+            console.log("onUploadFailed: file:" + uploadInfo.file.name + ",code:" + code + ", message:" + message);
+        },
+        // 文件上传进度，单位：字节
+        'onUploadProgress': function (uploadInfo, totalSize, loadedPercent) {
+            var speed= Math.ceil(loadedPercent * 100);
+            $(".upload_div_form_speed_progress").width(speed+"%");
+
+        },
+        // 上传凭证超时
+        'onUploadTokenExpired': function (uploadInfo) {
+            console.log("onUploadTokenExpired");
+            //实现时，根据uploadInfo.videoId调用刷新视频上传凭证接口重新获取UploadAuth
+            //https://help.aliyun.com/document_detail/55408.html
+            //从点播服务刷新的uploadAuth,设置到SDK里
+            uploader.resumeUploadWithAuth(uploadAuth);
+        },
+        //全部文件上传结束
+        'onUploadEnd':function(uploadInfo){
+
+        }
+    });
+    var userData = '{"Vod":{"Title":"test","CateId":"234"}}';
+    $("#video").change(function (event) {
+        uploader.addFile(event.target.files[0], null, null, null, userData);
+        setTimeout(function () {
+            uploader.startUpload();
+        },500)
+
+    })
+
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    function clear_upload_pic(element){
+        element.parents(".upload_image_pic").remove();
+    }
+    $("#image").change(function () {
+        var fd = new FormData();
+        fd.append("upload", 1);
+        var files=$(this).get(0).files[0];
+        if(!files){
+            return false;
+        }
+        fd.append("upfile", files);
+        $.ajax({
+            url: "{:url('Upload/upload_image')}",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function(res) {
+                if(res["status"]){
+                    var html="<div class='upload_image_pic'>" +
+                        "<image style='width: 100%;height: 100%' src='"+res["image_url"]+"'/>" +
+                        "<input type='hidden' value='"+res["image_code"]+"' class='image_code' name='image_code[]'/>" +
+                        "<img src='__STATIC__/image/close.png' class='upload_image_pic_close' onclick='clear_upload_pic($(this))'/>" +
+                        "</div>"
+                    $(".upload_image").before(html)
+                }else{
+                    swal(res.msg);
+                }
+            }
+        });
+    })
+
+    $("#form").submit(function () {
+
+        var form_data=$(this).serialize();
+        var action=$(this).attr("action");
+        $.ajax({
+            "url":action,
+            "type":"post",
+            "dataType":"json",
+            "data":form_data,
+            success:function (res) {
+                if(res.code==0){
+                    swal(res.msg,"","warning");
+                }else{
+                    swal({
+                        title: res.msg,
+                        type: "success"
+                    },function () {
+                        history.go(-1);
+                    });
+                }
+            }
+        })
+        return false;
+    })
+
+</script>
+
+
+
+
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="__STATIC__/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="__STATIC__/ueditor/ueditor.all.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var ue = UE.getEditor('container');
+</script>
+
+
+</body>
+
+</html>

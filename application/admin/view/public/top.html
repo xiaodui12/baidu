@@ -1,0 +1,91 @@
+<div class="row border-bottom white-bg">
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                <i class="fa fa-reorder" style="color: #666666"></i>
+            </button>
+            <a href="#" class="navbar-brand">Hplus</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar">
+
+            <ul class="nav navbar-nav" >
+                <volist name="menu" id="one">
+                    <li class="<if condition="isset($one['list'])">dropdown</if>  <if condition="isset($one['select'])&&$one['select']"> active</if>">
+                        <a aria-expanded="false" role="button"   <if condition="isset($one['url'])"> href="{$one.url}"<else/>class="dropdown-toggle" data-toggle="dropdown" </if>> {$one.title}
+                            <if condition="isset($one['list'])">
+                                <span class="caret"></span>
+                            </if>
+                        </a>
+                        <if condition="isset($one['list'])">
+                            <ul role="menu" class="dropdown-menu">
+                                <volist name="one['list']" id="two">
+                                    <li><a href="{$two.url}">{$two.title}</a>
+                                    </li>
+                                </volist>
+                            </ul>
+                        </if>
+                    </li>
+                </volist>
+
+                <!--<li class="active">-->
+                <!--<a aria-expanded="false" role="button" href="index.html"> 返回首页</a>-->
+                <!--</li>-->
+                <!--<li class="dropdown">-->
+                <!--<a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> 菜单 <span class="caret"></span></a>-->
+                <!--<ul role="menu" class="dropdown-menu">-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</li>-->
+                <!--<li class="dropdown">-->
+                <!--<a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> 菜单 <span class="caret"></span></a>-->
+                <!--<ul role="menu" class="dropdown-menu">-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">M菜单列表</a>-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</li>-->
+                <!--<li class="dropdown">-->
+                <!--<a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> 菜单 <span class="caret"></span></a>-->
+                <!--<ul role="menu" class="dropdown-menu">-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--<li><a href="">菜单列表</a>-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</li>-->
+                <!--<li class="dropdown">-->
+                <!--<a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> 设置 <span class="caret"></span></a>-->
+                <!--<ul role="menu" class="dropdown-menu">-->
+                <!--<li><a href="{:url('System/info')}">系统配置</a>-->
+                <!--</li>-->
+
+                <!--</ul>-->
+                <!--</li>-->
+
+            </ul>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <a href="{:url('Login/loginout')}">
+                        <i class="fa fa-sign-out"></i> 退出
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

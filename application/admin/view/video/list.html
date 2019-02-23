@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <include file="public/header"/>
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>视频列表</h5>
+                                <div class="ibox-tools">
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="DataTables_Table_0_length">
+                                    <div class="btn-group">
+                                        <a href="{:url('Video/lists',array('status'=>10))}" class="btn {$status==10?'btn-primary':'btn-white'}" type="button">审核成功</a>
+                                        <a href="{:url('Video/lists',array('status'=>1))}"  class="btn {$status==1?'btn-primary':'btn-white'}" type="button">审核中</a>
+                                        <a href="{:url('Video/lists',array('status'=>-1))}"  class="btn {$status==-1?'btn-primary':'btn-white'}" type="button">审核失败</a>
+                                    </div>
+                                </div></div><div class="col-sm-6"><div id="DataTables_Table_0_filter" class="dataTables_filter"><label>查找：<input type="search" class="form-control input-sm" aria-controls="DataTables_Table_0"></label></div></div></div><table class="table table-striped table-bordered table-hover dataTables-example dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th  tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" style="width: 40px;">序号</th>
+                                        <th  tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" style="width: 262px;">标题</th>
+                                        <th  tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"  style="width: 261px;">上传时间</th>
+                                        <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"  style="width: 424px;">状态</th>
+                                        <th  tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 186px;">预览</th>
+                                        <th  tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 190px;">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="list" id="list_one">
+                                        <tr class="gradeA odd">
+                                            <td class="sorting_1"><input type="checkbox" value="{$list_one.mediaid}"></td>
+                                            <td class="sorting_1">{$list_one.title}</td>
+                                            <td class=" ">{$list_one.create_time}</td>
+                                            <td class=" ">
+                                                <p>智能审核：{$list_one.ai_status==1?"审核成功":($list_one.ai_status==-1?"审核失败":"审核中")}</p>
+                                                <p>人工审核：{$list_one.preson_status==1?"审核成功":($list_one.preson_status==-1?"审核失败":"审核中")}</p>
+                                            </td>
+                                            <td class="center "><a class="show_video"  data-href="{$list_one.fileurl}">预览</a></td>
+                                            <td class="center ">
+                                               <if condition="$list_one.ai_status eq -1">
+                                                   <a>查看智能审核失败原因</a>
+                                               </if>
+                                               <if condition="$list_one['preson_status'] eq -1">
+                                                   <a>查看人工审核失败原因</a>
+                                                   <elseif condition="$list_one['preson_status'] eq 0"/>
+                                                   <a  data-mediaid="{$list_one.mediaid}">审核通过</a>
+                                                   <a data-mediaid="{$list_one.mediaid}">审核不通过</a>
+                                               </if>
+                                                <if condition="$list_one['preson_status'] eq 1 && $list_one['ai_status'] eq 1 ">
+                                                    审核完成
+                                                </if>
+                                                <a >刷新状态</a>
+                                            </td>
+                                        </tr>
+                                    </volist>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+
+                                    </tfoot>
+                                </table>
+                                    <div>
+                                        <a class="select_all">全选</a>
+                                        <a  class="no_select_all">全不选</a>
+                                        <a class="pass_examine">批量通过审核</a>
+                                    </div>
+                                    {$list->render()}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <include file="public/footer"/>
+        <script src="__H__/js/plugins/layer/layer.min.js"></script>
+        <script type="text/javascript">
+
+            $(".show_video").click(function () {
+                var harf=$(this).attr("data-href");
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: true,
+                    shade: [0],
+                    area: ['800px', '600px'],
+                    shift: 2,
+                    content: [harf, 'no'], //iframe的url，no代表不显示滚动条
+                    end: function(){ //此处用于演示
+
+                    }
+                });
+            })
+
+             $(".select_all").click(function () {
+                 $("input[type=checkbox]").prop("checked",true);
+             })
+
+             $(".no_select_all").click(function () {
+                 $("input[type=checkbox]").prop("checked",false);
+             })
+            $(".pass_examine").click(function () {
+                var list=[];
+                $("input[type=checkbox]:checked").each(function(){
+                    var list_one={};
+                    list_one["VideoId"]=$(this).val();
+                    list_one["Status"]="Normal";
+                    list.push(list_one);
+                })
+                send_ajax(list);
+
+            })
+            
+            
+            function send_ajax(list) {
+                if(list.length==0){
+                    swal("请选择审核项");
+                    return false;
+                }
+                $.ajax({
+                    url:"{:url('Video/send_audit')}",
+                    type:"post",
+                    data:{
+                        list:list
+                    },
+                    dataType:"json",
+                    success:function (res) {
+
+                    }
+                })
+            }
+
+        </script>
+    </div>
+</div>
+</body>
+
+</html>
+
+
+

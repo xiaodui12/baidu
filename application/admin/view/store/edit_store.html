@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="__H__/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <include file="public/header"/>
+    <style>
+        .map_info{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: 10;
+            display: none;
+        }
+        .map_mask{
+            position: absolute;
+            top: 0;
+            height: 100%;
+            left: 0;
+            width: 100%;
+            background: #111111;
+            opacity: 0.4;
+            z-index: 10;
+        }
+        .map_div{
+            position: relative;
+            top: 8%;
+            height: 80%;
+            width: 600px;
+            margin: auto;
+            z-index: 11;
+        }
+        .mapPage{
+            width: 600px;
+            margin: auto;
+            height: 100%;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row" style="background: #f1f1f1">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5><if condition="empty($id)">新增店铺<else/>修改店铺</if></h5>
+                            </div>
+                            <div class="ibox-content">
+                                <form method="post" class="form-horizontal" id="submit_form" action="{:url('Store/edit_store_submit',array('id'=>$id))}">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">店铺名称：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" placeholder="店铺名称(必填)" name="store_name" value="{$store_info['store_name']|default=''}" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">联系人：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="contacts" value="{$store_info['contacts']|default=''}" placeholder="联系人(必填)" required>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">联系电话：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="contact_number" value="{$store_info['contact_number']|default=''}" placeholder="联系电话" />
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">邮箱：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="email" value="{$store_info['email']|default=''}" placeholder="邮箱" />
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">店铺简介：</label>
+
+                                        <div class="col-sm-10">
+                                            <textarea type="text" class="form-control" name="desc" value="{$store_info['desc']|default=''}" placeholder="店铺简介" >{$store_info['desc']|default=''}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">地址：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control change_url" data-url="{$map_url}" name="address" value="{$store_info['address']|default=''}" placeholder="点击编辑地址" readonly />
+                                            <input type="text" class="form-control change_url" name="longitude" value="{$store_info['longitude']|default=''}" placeholder="点击编辑地址" readonly  style="display: none" />
+                                            <input type="text" class="form-control change_url" name="latitude" value="{$store_info['latitude']|default=''}" placeholder="点击编辑地址" readonly  style="display: none"  />
+                                            <input type="text" class="form-control change_url" name="city" value="{$store_info['city']|default=''}" placeholder="城市" readonly  style="display: none"  />
+
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">门牌号：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="door" value="{$store_info['door']|default=''}" placeholder="门牌号" />
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">状态：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="checkbox" name="status" class="js-switch"  {$store_info['status']?"checked":""}  />
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-primary" type="submit">保存内容</button>
+                                            <button class="btn btn-white back" type="button" >返回</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <include file="public/footer"/>
+    </div>
+</div>
+
+<div class="map_info">
+    <div class="map_mask"> </div>
+    <div class="map_div">
+            <iframe src='' class="mapPage" name="test" frameborder="0" scrolling="yes"></iframe>
+            <div style="text-align: center"><button  class="set_address btn  btn-primary" style="width: 40%">确定</button><button  class="close_address btn  btn-default" style="width: 40%">关闭</button></div>
+    </div>
+</div>
+<script>
+
+
+    //地址信息
+    var address="";
+    window.addEventListener("message",function (event) {
+        var loc = event.data;
+        if (loc && loc.module == 'locationPicker'){
+            address=loc;
+            console.log(address);
+        }
+    },false)
+    // 展示地图选择页面
+    $(".change_url").click(function () {
+        var url= $(this).attr("data-url");
+        $(".mapPage").attr("src",url);
+        $(".map_info").show();
+        address="";
+    })
+    $(".set_address").click(function () {
+        if(address==""){
+            swal("请选择地址","");
+            return false;
+        }
+        if(address["poiname"]=="我的位置"){
+            swal("请不要选择我的位置","");
+            return false;
+        }
+        $("input[name=longitude]").val(address["latlng"]["lng"]);
+        $("input[name=latitude]").val(address["latlng"]["lat"]);
+        $("input[name=city]").val(address["cityname"]);
+        $("input[name=address]").val(address["poiname"]+"("+address["poiaddress"]+")");
+        $(".map_info").hide();
+
+    })
+    $(".close_address").click(function () {
+        $(".map_info").hide();
+    })
+
+
+
+
+</script>
+<!-- Switchery -->
+<script src="__H__/js/plugins/switchery/switchery.js"></script>
+
+<script>
+    var elem = document.querySelector('.js-switch');
+    var switchery = new Switchery(elem, {
+        color: '#1AB394'
+    });
+    $(".back").click(function () {
+        history.go(-1);
+    })
+    $("#submit_form").submit(function () {
+        var action=$(this).attr("action");
+
+        var data=$(this).serialize();
+        $.ajax({
+            url:action,
+            "type":"post",
+            "dataType":"json",
+            "data":data,
+            success:function (res) {
+                if(res.code==0){
+                    swal(res.msg,"","warning");
+                }else{
+                    swal({
+                        title: res.msg,
+                        type: "success"
+                    },function () {
+                        history.go(-1);
+                    });
+                }
+            }
+        })
+
+        return false;
+    })
+</script>
+</body>
+
+</html>

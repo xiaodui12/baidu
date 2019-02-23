@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="__H__/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <include file="public/header"/>
+</head>
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row" style="background: #f1f1f1">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>{$sub_title}</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <form method="post" class="form-horizontal" id="submit_form" action="{:url('System/save_mp',array('type'=>$type))}">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">名称：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" placeholder="名称（必填）" name="title" value="{$info['title']|default=''}" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">原始id：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="source_id" value="{$info['source_id']|default=''}" placeholder="原始id" >
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">微信号：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="pub_account" value="{$info['pub_account']|default=''}" placeholder="微信号" >
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Appid：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="appid" value="{$info['appid']|default=''}" placeholder="公众号或小程序appid（必填）" required>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Secret：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="secret" value="{$info['secret']|default=''}" placeholder="公众号或小程序secret（必填）" required>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">商户号：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="mchid" value="{$info['mchid']|default=''}" placeholder="商户号" >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">商户mchkey：</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="mchkey" value="{$info['mchkey']|default=''}" placeholder="商户mchkey" >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-primary" type="submit">保存内容</button>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <include file="public/footer"/>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#submit_form").submit(function () {
+            var title=$(this).find("[name=title]").val();
+            var source_id=$(this).find("[name=source_id]").val();
+            var pub_account=$(this).find("[name=pub_account]").val();
+            var appid=$(this).find("[name=appid]").val();
+            var secret=$(this).find("[name=secret]").val();
+            var mchkey=$(this).find("[name=mchkey]").val();
+            var mchid=$(this).find("[name=mchid]").val();
+
+            var action=$(this).attr("action");
+            $.ajax({
+                url:action,
+                type:"post",
+                dataType:"json",
+                data:{
+                    title:title,
+                    source_id:source_id,
+                    pub_account:pub_account,
+                    appid:appid,
+                    secret:secret,
+                    mchkey:mchkey,
+                    mchid:mchid
+                },success:function (res) {
+                    if(res.code==0){
+                        swal(res.msg,"","warning");
+                    }else{
+                        swal({
+                            title: res.msg,
+                            type: "success"
+                        },function () {
+                            location.reload();
+                        });
+                    }
+                }
+            })
+            return false;
+        })
+    })
+
+</script>
+
+
+</body>
+
+</html>

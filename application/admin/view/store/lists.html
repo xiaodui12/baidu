@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <include file="public/header"/>
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row" style="background: #f1f1f1">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>店铺列表</h5>
+                                <div class="ibox-tools">
+                                    <a href="{:url('Store/edit_store')}" class="btn btn-sm btn-primary j-edit"><i class="glyphicon glyphicon-plus"></i>新增</a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>店铺名称</th>
+                                        <th>联系人</th>
+                                        <th>所在区域</th>
+                                        <th>注册时间</th>
+                                        <th>更新时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="store" id="one">
+                                        <tr>
+                                            <td><input type="checkbox" value="{$one->id}"></td>
+                                            <td>{$one->store_name}</td>
+                                            <td>{$one->contacts}</td>
+                                            <td>{$one->province} {$one->city} {$one->area}</td>
+                                            <td>{$one->create_time}</td>
+                                            <td>{$one->update_time}</td>
+                                            <td>{$one->status==1?"启用":"禁用"}</td>
+                                            <td>
+                                                <a href="{:url('Store/edit_store',array('store_id'=>$one->id))}" class="btn btn-primary j-edit">编辑</a>
+                                                <a href="javascript:;" data-id="{$one->id}" data-status="{$one->status}" class="btn btn-primary j-agent ">{$one->status==1?"取消启用":"启用"}</a>
+                                                <a href="javascript:;" class="btn j-del" title="删除" data-id="{$one->id}">删除</a>
+                                            </td>
+                                        </tr>
+                                    </volist>
+                                    </tbody>
+                                </table>
+                                <div style="text-align: center">
+                                    {$store->render();}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <include file="public/footer"/>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(".j-agent").click(function (){
+        var status=$(this).attr("data-status");
+        var id=$(this).attr("data-id");
+        send_status(id,status);
+    })
+    $(".j-del").click(function () {
+        var id=$(this).attr("data-id");
+        swal({
+            title: "您确定要删除这条信息吗",
+            text: "删除后将无法恢复，请谨慎操作！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删除",
+            closeOnConfirm: false
+        }, function () {
+            send_status(id,-1)
+        });
+    })
+
+    function send_status(id,status) {
+        $.ajax({
+            "url":"{:url('Store/change_store_status')}",
+            "type":"post",
+            "dataType":"json",
+            "data":{
+                status:status,
+                store_id:id
+            },
+            success:function (res) {
+                if(res.code==0){
+                    swal(res.msg,"","warning");
+                }else{
+                    swal({
+                        title: res.msg,
+                        type: "success"
+                    },function () {
+                        location.reload();
+                    });
+                }
+            }
+        })
+    }
+</script>
+
+</body>
+
+</html>

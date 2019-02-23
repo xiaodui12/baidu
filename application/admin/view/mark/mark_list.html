@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+    <include file="public/header"/>
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="public/top"/>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="row" style="background: #f1f1f1">
+
+
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>报名模板</h5>
+                                <div class="ibox-tools">
+                                    <a  class="btn btn-sm btn-primary j-edit add_first"><i class="glyphicon glyphicon-plus"></i>新增模板</a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th style="width: 50%">模板名称</th>
+                                        <th>模板状态</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="list" id="one">
+                                        <tr>
+                                            <td><input type="checkbox" value="{$one->id}"></td>
+                                            <td>{$one->title}</td>
+                                            <td>{$one->status==1?"启用":"禁用"}</td>
+                                            <td>{$one->create_time}</td>
+                                            <td>
+                                                <a  href="{:url('Mark/edit_sign_up',array('id'=>$one->id))}" class="btn btn-primary ">编辑模板</a>
+                                                <a   class="btn btn-primary add_first" data-title="{$one->title}" data-id="{$one->id}">修改名称</a>
+                                                <a  class="btn btn-primary change_status"  data-id="{$one->id}" data-status="{$one->status}">{$one->status==1?"禁用":"启用"}</a>
+                                                <a href="javascript:;" class="btn j-del" title="删除" data-id="{$one->id}">删除</a>
+                                            </td>
+                                        </tr>
+                                    </volist>
+                                    </tbody>
+                                </table>
+                                <div style="text-align: center">
+                                    {$list->render();}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <include file="public/footer"/>
+    </div>
+</div>
+<script src="__H__/js/plugins/layer/layer.min.js"></script>
+
+<script type="text/javascript" src="__STATIC__/js/template.js"></script>
+
+<style>
+    .edit_template_div{
+        width: 90%;
+        margin: auto;
+        line-height: 2em;
+    }
+    .edit_template_div input{
+        width: 100%;
+    }
+</style>
+
+<script id="edit_template" type="text/html">
+    <form id="sign_up_add" onsubmit="return sign_up_add($(this))" action="{:url('Mark/edit_temp')}">
+        <div class="edit_template_div">
+            <div>
+                <p style="line-height: 2em;font-size: 16px">模板标题</p>
+                <input type="hidden" name="id" value="<%=id%>"/>
+                <input type="text" name="title" value="<%=title%>" placeholder="模板标题"/>
+            </div>
+            <div style="margin:30px 0 ">
+                <button class="btn btn-success" type="submit">
+                    保存
+                </button>
+
+            </div>
+
+        </div>
+    </form>
+
+</script>
+
+
+<script>
+
+
+    function sign_up_add(form) {
+        var id=form.find("[name=id]").val();
+        var data=form.serialize();
+        var action=form.attr("action");
+        $.ajax({
+            url:action,
+            type:"post",
+            "dataType":"json",
+            "data":data,
+            success:function (res) {
+                if(res.code==0){
+                    swal(res.msg,"","warning");
+                }else{
+                    layer.closeAll();
+                    swal({
+                        title: res.msg,
+                        type: "success"
+                    },function () {
+
+                        if(id&&id!="0"){
+                            location.reload();
+                        }else{
+                            location.href=res.url;
+                        }
+
+                    });
+                }
+            }
+        })
+        return false;
+    }
+
+    $(".add_first").click(function () {
+        var save={id:0,title:""};
+        if($(this).attr("data-id")){
+            save["id"]=$(this).attr("data-id");
+            save["title"]=$(this).attr("data-title");
+        }
+        var html = template($("#edit_template").html(), save);
+        layer.open({
+            type: 1,
+            title: '编辑',
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            anim: 2,
+            area: ['440px'],
+            shadeClose: true, //开启遮罩关闭
+            content: html
+        });
+    })
+
+    function change_status(status,id){
+        $.ajax({
+            url:"{:url('Mark/change_mark_status')}",
+            type:"post",
+            "dataType":"json",
+            "data":{
+                status:status,
+                id:id
+            },
+            success:function (res) {
+                if(res.code==0){
+                    swal(res.msg,"","warning");
+                }else{
+                    swal({
+                        title: res.msg,
+                        type: "success"
+                    },function () {
+                        location.reload();
+                    });
+                }
+            }
+        })
+    }
+
+    $(".change_status").click(function () {
+        var id=$(this).attr("data-id");
+        var status=$(this).attr("data-status");
+        change_status(status,id);
+    })
+    $(".j-del").click(function () {
+        var id=$(this).attr("data-id");
+        swal({
+            title: "您确定要删除这条信息吗",
+            text: "删除后将无法恢复，请谨慎操作！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删除",
+            closeOnConfirm: false
+        }, function () {
+            change_status(-1,id);
+        });
+    })
+
+</script>
+
+</body>
+
+</html>

@@ -333,19 +333,15 @@ class aliyun
             $ossClient = new OssClient($this->keyid, $this->secret, $endpoint);
 
             $result=$ossClient->uploadFile($this->bucket, "test", $_SERVER['DOCUMENT_ROOT'].$url);
-            dump(1);
+
         } catch(OssException $e) {
-            dump(2);
+
             printf(__FUNCTION__ . ": FAILED\n");
             printf($e->getMessage() . "\n");
             return;
         }
 
 
-        https://testoss4.oss-cn-hangzhou.aliyuncs.com/test?
-        //Expires=1550891041&
-        //OSSAccessKeyId=TMP.AQFH1aWsSz6JAnxgqwZOWwkxIpkyVjou27gU5g3bNLrOlclXMaAXo1YbRkkTMC4CFQCpomAiexId4XX6FTeKUt13y6uSCAIVAIX92CUouwYhPPPgIFsPIMcUJzc8&
-        //Signature=PUxO%2BpLuRBrCp1%2B3rbnaEyDmock%3D
 
         return $result;
     }
